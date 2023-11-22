@@ -3,7 +3,13 @@
     use App\Models\Order; // Replace with your Order model
 use Illuminate\Http\Request;
     class MpesaController extends Controller
-    { public function showPaymentForm() {
+    
+    { 
+        
+        
+        
+   
+        public function showPaymentForm() {
         return view('mpesa_payment');
     }
     public function initiatePayment($order_id)
@@ -16,12 +22,31 @@ use Illuminate\Http\Request;
         // Handle the case where the order does not exist
         return redirect()->route('payment.failed', ['error' => 'Order not found']);
     }
-
+    function formatKenyaPhoneNumber($phoneNumber) {
+        // Convert the phone number to a string for easy manipulation
+        $phoneNumberStr = (string)$phoneNumber;
+    
+        // Remove any leading '0' or "254"
+        $phoneNumberStr = ltrim($phoneNumberStr, '0');
+        $phoneNumberStr = ltrim($phoneNumberStr, '254');
+    
+        // Add '254' at the beginning of the phone number
+        $formattedPhoneNumberStr = '254' . $phoneNumberStr;
+    
+        // Cast the formatted phone number string to an integer
+        $formattedPhoneNumberInt = (int)$formattedPhoneNumberStr;
+    
+        return $formattedPhoneNumberInt;
+    }
     // Extract the total amount and phone number from the order
-    // Extract the total amount and phone number from the order
+    // Extract the total amount and phone number from the order 
        $amount = (int)$order->total_amount;
        $phone_number = (int)$order->phone;
+       $phone_number = formatKenyaPhoneNumber((int)$phone_number);
 
+
+      
+    
 
         
             // Define the credentials
