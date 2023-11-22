@@ -86,7 +86,11 @@ $data = array(
     
             // Check the result and return a JSON data
             if ($status == 200) {
-                $response = ["message" => "Payment request sent successfully. Please check your phone and enter your PIN."];
+                request()->session()->flash('success','Payment request sent successfully. Please check your phone and enter your PIN.');
+                return redirect()->route('PaymentConfirmation');
+
+
+                // $response = ["message" => "Payment request sent successfully. Please check your phone and enter your PIN."];
             } else {
                 $response = ["message" => "Payment request failed. Please try again."];
             }

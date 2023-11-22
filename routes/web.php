@@ -17,6 +17,7 @@
     use App\Http\Controllers\HomeController;
     use \UniSharp\LaravelFilemanager\Lfm;
     use App\Http\Controllers\MpesaController;
+    use App\Http\Controllers\MpesaConfirmation;
 
 
 
@@ -84,7 +85,11 @@
     Route::get('/cart', function () {
         return view('frontend.pages.cart');
     })->name('cart');
+    Route::get('/PaymentConfirmation', function () {
+        return view('frontend.pages.MpesaConfirm');
+    })->name('PaymentConfirmation');
     Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout')->middleware('user');
+
 // Wishlist
     Route::get('/wishlist', function () {
         return view('frontend.pages.wishlist');
