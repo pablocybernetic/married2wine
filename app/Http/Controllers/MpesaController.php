@@ -125,14 +125,25 @@ $data = array(
 
 
        
-        public function handleCallback(Request $request)
+        public function mpesaCallback(Request $request, $id)
         {
             // Log the callback data for debugging
-            // Log::info('M-Pesa Callback Data:', $request->all());
-            echo $request->all();
+            Log::info('M-Pesa Callback Data:', $request->all());
     
             // Implement your logic to process the callback data here
             // For example, update the order status based on the callback data
+    
+            // Retrieve the specific user based on the $id parameter
+            $user = User::find($id);
+    
+            // Check if the user exists
+            if ($user) {
+                // Echo the callback data for the specific user
+                echo "Callback data for User ID $id: " . json_encode($request->all());
+            } else {
+                // User not found
+                echo "User with ID $id not found.";
+            }
     
             // Respond to Safaricom with a success status
             return response()->json(['ResultCode' => 0, 'ResultDesc' => 'Callback processed successfully']);
