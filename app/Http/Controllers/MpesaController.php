@@ -124,9 +124,18 @@ $data = array(
         }
 
 
+       
         public function handleCallback(Request $request)
         {
-            // Your code to handle the M-Pesa callback
+            // Log the callback data for debugging
+            // Log::info('M-Pesa Callback Data:', $request->all());
+            echo $request->all();
+    
+            // Implement your logic to process the callback data here
+            // For example, update the order status based on the callback data
+    
+            // Respond to Safaricom with a success status
+            return response()->json(['ResultCode' => 0, 'ResultDesc' => 'Callback processed successfully']);
         }
     }
     
