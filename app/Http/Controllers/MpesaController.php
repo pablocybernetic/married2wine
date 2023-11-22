@@ -129,9 +129,13 @@ $data = array(
         {
             // Log the callback data for debugging
             Log::info('M-Pesa Callback Data:', $request->all());
+            request()->session()->flash('success','Payment  successfully.');
+
+            return redirect()->route('PaymentConfirmation');
+
         
             // Echo the callback data for debugging (remove this in production)
-            echo json_encode($request->all());
+            // echo json_encode($request->all());
         
             // Implement your logic to process the callback data here
             // For example, update the order status based on the callback data
