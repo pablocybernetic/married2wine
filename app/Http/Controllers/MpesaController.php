@@ -133,7 +133,7 @@ use Paymentsds\MPesa\Environment;
         
                 if ($order) {
                     // Check if the order status is not already 'completed'
-                    if ($order->status != 'completed') {
+                    if ($order->payment_status != 'paid') {
                         // Update the order status to 'completed' or any other status you desire
                         $order->update([
                             'status' => 'completed', // Update with the desired status
