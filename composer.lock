@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c59a5c4b871023ab68aa9bc657b37c27",
+    "content-hash": "9fcee839b4fcaeb20198d50a51f97efa",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -2837,6 +2837,76 @@
                 "source": "https://github.com/paragonie/sodium_compat/tree/v1.19.0"
             },
             "time": "2022-09-26T03:40:35+00:00"
+        },
+        {
+            "name": "paymentsds/mpesa",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paymentsds/mpesa-php-sdk.git",
+                "reference": "272781f2c31efa3fe47a85c5960b08f6c6d23608"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paymentsds/mpesa-php-sdk/zipball/272781f2c31efa3fe47a85c5960b08f6c6d23608",
+                "reference": "272781f2c31efa3fe47a85c5960b08f6c6d23608",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "7.*",
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5",
+                "vlucas/phpdotenv": "^5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Paymentsds/MPesa/Environment.php",
+                    "src/Paymentsds/MPesa/Operation.php",
+                    "src/Paymentsds/MPesa/Constants.php",
+                    "src/Paymentsds/MPesa/Configuration.php",
+                    "src/Paymentsds/MPesa/Service.php",
+                    "src/Paymentsds/MPesa/Client.php",
+                    "src/Paymentsds/MPesa/ErrorType.php",
+                    "src/Paymentsds/MPesa/Response.php",
+                    "src/Paymentsds/MPesa/Exception/AuthenticationException.php",
+                    "src/Paymentsds/MPesa/Exception/InvalidHostException.php",
+                    "src/Paymentsds/MPesa/Exception/InvalidReceiverException.php",
+                    "src/Paymentsds/MPesa/Exception/TimeoutException.php",
+                    "src/Paymentsds/MPesa/Exception/ValidationException.php"
+                ],
+                "psr-4": {
+                    "Paysuite\\MPesa\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Edson Michaque",
+                    "email": "edson@michaque.com"
+                },
+                {
+                    "name": "Elton Laice",
+                    "email": "me@eltonlaice.com"
+                },
+                {
+                    "name": "Karson Adam",
+                    "email": "karson@turbohost.co.mz"
+                }
+            ],
+            "description": "PHP client library for MPesa API",
+            "support": {
+                "issues": "https://github.com/paymentsds/mpesa-php-sdk/issues",
+                "source": "https://github.com/paymentsds/mpesa-php-sdk/tree/1.0.1"
+            },
+            "time": "2022-11-07T14:20:12+00:00"
         },
         {
             "name": "phenx/php-font-lib",
