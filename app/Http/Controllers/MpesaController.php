@@ -116,60 +116,54 @@ use Paymentsds\MPesa\Environment;
 }
 
         
+public function mpesaCallback(Request $request)
+{
+    // Log the callback data for debugging
+    // Log::info('M-Pesa Callback Data:', $request->all());
+    
+    // Extract relevant data from the callback
+    $resultCode = $request->input('ResultCode');
+    $resultDesc = $request->input('ResultDesc');
+    $accountReference = $request->input('AccountReference');
 
-        public function handleCallback(Request $request)
-        {
-            // Log the callback data for debugging
-            Log::info('M-Pesa Callback Data:', $request->all());
-            
-        
-            // Extract relevant data from the callback
-            $resultCode = $request->input('ResultCode');
-            $resultDesc = $request->input('ResultDesc');
-            $accountReference = $request->input('AccountReference');
-        
-            if ($resultCode == 0) {
-                // Payment was successful, update the order status
-                $order = Order::find($accountReference);
-        
-                if ($order) {
-                    // Check if the order status is not already 'completed'
-                    if ($order->payment_status != 'paid') {
-                        // Update the order status to 'completed' or any other status you desire
-                        $order->update([
-                            'status' => 'completed', // Update with the desired status
-                            // You can add more fields to update based on your requirements
-                        ]);
-        
-                        // Additional logic can be added here based on your requirements
-        
-                        // Flash a success message to the session
-                        request()->session()->flash('success', 'Payment successfully processed.');
-        
-                        // Redirect to the order confirmation page or any other desired page
-                        return redirect()->route('order.confirmation', ['order_id' => $order->id]);
-                    } else {
-                        // Order status is already 'completed', handle accordingly
-                        request()->session()->flash('info', 'Payment already processed for this order.');
-                        return redirect()->route('PaymentConfirmation');
-                    }
-                } else {
-                    $order->update([
-                        'status' => 'completed', // Update with the desired status
-                        // You can add more fields to update based on your requirements
-                    ]);
-                    // If the order is not found, respond with an error status
-                    request()->session()->flash('error', 'Order not found.');
-                    return redirect()->route('payment.failed');
-                }
+    // Find the order with the specified AccountReference
+    $order = Order::find($accountReference);
+
+    if ($order) {
+        if ($resultCode == 0) {
+            // Payment was successful, update the order status
+            // Check if the order status is not already 'completed'
+            if ($order->payment_status != 'paid') {
+                // Update the order status to 'completed' or any other status you desire
+                $order->update([
+                    'payment_status' => 'paid', // Update with the desired status
+                    // You can add more fields to update based on your requirements
+                ]);
+
+                // Additional logic can be added here based on your requirements
+                return response()->json(['success', 'Payment successfully processed.']);
+                // Flash a success message to the session
+                // request()->session()->flash('success', 'Payment successfully processed.');
+
+                // Redirect to the order confirmation page or any other desired page
+                return redirect()->route('order.confirmation', ['order_id' => $order->id]);
             } else {
-                // Payment was not successful, handle accordingly
-                request()->session()->flash('error', 'Payment failed. ' . $resultDesc);
-                return redirect()->route('payment.failed');
+                // Order status is already 'completed', handle accordingly
+                request()->session()->flash('info', 'Payment already processed for this order.');
+                return redirect()->route('PaymentConfirmation');
             }
+        } else {
+            // Payment was not successful, handle accordingly
+            request()->session()->flash('error', 'Payment failed. ' . $resultDesc);
+            return redirect()->route('payment.failed');
         }
-        
-        
+    } else {
+        // If the order is not found, respond with an error status
+        request()->session()->flash('error', 'Order not found.');
+        return redirect()->route('payment.failed');
+    }
+}
+
       
                
     }
