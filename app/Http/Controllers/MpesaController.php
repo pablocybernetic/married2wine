@@ -137,6 +137,7 @@ public function mpesaCallback(Request $request)
                 // Update the order status to 'completed' or any other status you desire
                 $order->update([
                     'payment_status' => 'paid', // Update with the desired status
+                    'status'=>'process',
                     // You can add more fields to update based on your requirements
                 ]);
 
