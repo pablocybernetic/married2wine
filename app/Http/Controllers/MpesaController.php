@@ -121,6 +121,7 @@ use Paymentsds\MPesa\Environment;
         {
             // Log the callback data for debugging
             Log::info('M-Pesa Callback Data:', $request->all());
+            
         
             // Extract relevant data from the callback
             $resultCode = $request->input('ResultCode');
