@@ -76,7 +76,7 @@ use Paymentsds\MPesa\Environment;
     curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json','Authorization:Bearer '.$access_token));
 
     // Create the callback url
-    $callback_url = 'https://married2wine.com/mpesa/callback';
+    $callback_url = 'https://married2wine.com/mpay/callback';
 
     // Create the request data
     $data = array(
