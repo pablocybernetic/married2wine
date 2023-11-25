@@ -211,7 +211,7 @@
         Route::post('change-password', [HomeController::class, 'changPasswordStore'])->name('change.password');
 
     });
-    Route::post('/mpesa/callback/{id}', [MpesaController::class, 'mpesaCallback']);
+    Route::post('/mpesa/callback/', [MpesaController::class, 'mpesaCallback']);
 
 
     Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {

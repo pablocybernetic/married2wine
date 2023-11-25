@@ -87,10 +87,10 @@ use Paymentsds\MPesa\Environment;
         'Amount' => $amount,
         'PartyA' => $phone_number,
         'PartyB' => $shortcode,
-        'PhoneNumber' => $phone_number,
+        'PhoneNumber' => $phone_number, 
         'CallBackURL' => $callback_url,
         'AccountReference' => $order_id, // Use the order ID as AccountReference
-        'TransactionDesc' => "Test Payment  Married2Wine"
+        'TransactionDesc' => "Married2Wine"
     );
 
     $data_string = json_encode($data);
