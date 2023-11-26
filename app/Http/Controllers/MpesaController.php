@@ -125,15 +125,15 @@ public function mpesaCallback(Request $request)
     // Log::info('M-Pesa Callback Data:', $request->all());
 
     // Extract relevant data from the callback JSON
-    $data = json_decode($request->getContent(), true);
+    $data = $request->input('Body.stkCallback');
 
     // Ensure that the required fields are present in the JSON data
     $resultCode = $data['ResultCode'] ?? null;
     $resultDesc = $data['ResultDesc'] ?? null;
-    $accountReference = $data['AccountReference'] ?? null;
+    $accountReference = $data['CheckoutRequestID'] ?? null;
 
     // Find the order with the specified AccountReference
-    $order = Order::find($accountReference);
+    $order = Order::where('id', $accountReference)->first();
 
     if ($order) {
         if ($resultCode == 0) {
@@ -144,21 +144,15 @@ public function mpesaCallback(Request $request)
                 $order->update([
                     'payment_status' => 'paid', // Update with the desired status
                     'status' => 'process',
-                    'MpesaTransID' => $data['TransID'] ?? null,
-                    'MpesaTransAmount' => $data['TransAmount'] ?? null,
-                    'MpesaPhone' => $data['MSISDN'] ?? null,
-                    'MpesaFirstName' => $data['FirstName'] ?? null,
-
+                    'MpesaTransID' => $this->getCallbackItemValue($data, 'MpesaReceiptNumber'),
+                    'MpesaTransAmount' => $this->getCallbackItemValue($data, 'Amount'),
+                    'MpesaPhone' => $this->getCallbackItemValue($data, 'PhoneNumber'),
+                    'MpesaFirstName' => null, // Add the appropriate field from the callback
                     // You can add more fields to update based on your requirements
                 ]);
 
                 // Additional logic can be added here based on your requirements
                 return response()->json(['success' => 'Payment successfully processed.']);
-                // Flash a success message to the session
-                // request()->session()->flash('success', 'Payment successfully processed.');
-
-                // Redirect to the order confirmation page or any other desired page
-                return redirect()->route('order.confirmation', ['order_id' => $order->id]);
             } else {
                 // Order status is already 'completed', handle accordingly
                 request()->session()->flash('info', 'Payment already processed for this order.');
@@ -167,17 +161,32 @@ public function mpesaCallback(Request $request)
         } else {
             // Payment was not successful, handle accordingly
             request()->session()->flash('error', 'Payment failed. ' . $resultDesc);
-            $response = ["message" => "Payment was not successful" . $resultDesc];
+            $response = ["message" => "Payment was not successful. " . $resultDesc];
             return response()->json($response);
         }
     } else {
         // If the order is not found, respond with an error status
         request()->session()->flash('error', 'Order not found.');
         $response = ["message" => "Order not found"];
-        return response()->json($data);
+        return response()->json($response);
     }
 }
 
+private function getCallbackItemValue($data, $itemName)
+{
+    $value = null;
+
+    if (isset($data['CallbackMetadata']['Item'])) {
+        foreach ($data['CallbackMetadata']['Item'] as $item) {
+            if ($item['Name'] === $itemName) {
+                $value = $item['Value'] ?? null;
+                break;
+            }
+        }
+    }
+
+    return $value;
+}
 
       
                
