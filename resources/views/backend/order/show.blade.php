@@ -87,9 +87,16 @@
                       <td> : Ksh {{number_format($order->coupon,2)}}</td>
                     </tr>
                     <tr>
-                        <td>Total Amount</td>
-                        <td> : Ksh {{number_format($order->total_amount,2)}}</td>
-                    </tr>
+                      <td>Total Amount</td>
+                      <td> : Ksh {{number_format($order->total_amount,2)}}</td>
+                  </tr>
+                  @if(!is_null($order->MpesaTransAmount))
+             <tr>
+        <td>Paid Amount</td>
+        <td>: Ksh {{ number_format($order->MpesaTransAmount, 2) }}</td>
+    </tr>
+@endif
+
                     <tr>
                         <td>Payment Method</td>
                         <td> : @if($order->payment_method=='cod') Cash on Delivery @elseif($order->payment_method=='mpesa')Mpesa @else Paypal @endif</td>
