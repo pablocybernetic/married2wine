@@ -166,12 +166,15 @@ public function mpesaCallback(Request $request)
         } else {
             // Payment was not successful, handle accordingly
             request()->session()->flash('error', 'Payment failed. ' . $resultDesc);
-            return redirect()->route('payment.failed');
-        }
+        $response = ["message" => "Payment was not successful" . $resultDesc];
+            return response()->json($response);
+
+    }
     } else {
         // If the order is not found, respond with an error status
         request()->session()->flash('error', 'Order not found.');
-        return redirect()->route('payment.failed');
+        $response = ["message" => "Order not found"];
+        return response()->json($response);
     }
 }
 
