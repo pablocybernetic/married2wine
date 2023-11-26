@@ -53,7 +53,6 @@ use Paymentsds\MPesa\Environment;
     $consumer_secret = config('app.consumer_secret');
     $passkey = config('app.passkey');
     $shortcode = config('app.shortcode');
-
     
     // Get the access token
     $url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
@@ -143,6 +142,12 @@ public function mpesaCallback(Request $request)
                 $order->update([
                     'payment_status' => 'paid', // Update with the desired status
                     'status'=>'process',
+                    'MpesaTransID'=>'TransID',
+                    'MpesaTransAmount'=>'TransAmount',
+                    'MpesaPhone'=>'MSISDN',
+                    'MpesaFirstName'=>'FirstName',
+
+                    	
                     // You can add more fields to update based on your requirements
                 ]);
 
