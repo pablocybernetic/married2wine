@@ -119,16 +119,18 @@ use Paymentsds\MPesa\Environment;
     // return response()->json($response);
 }
 
-        
 public function mpesaCallback(Request $request)
 {
-    // Log the callback data forrrdebug
+    // Log the callback data for debugging
     // Log::info('M-Pesa Callback Data:', $request->all());
-    
-    // Extract relevant data from the callback
-    $resultCode = $request->input('ResultCode');
-    $resultDesc = $request->input('ResultDesc');
-    $accountReference = $request->input('AccountReference');
+
+    // Extract relevant data from the callback JSON
+    $data = json_decode($request->getContent(), true);
+
+    // Ensure that the required fields are present in the JSON data
+    $resultCode = $data['ResultCode'] ?? null;
+    $resultDesc = $data['ResultDesc'] ?? null;
+    $accountReference = $data['AccountReference'] ?? null;
 
     // Find the order with the specified AccountReference
     $order = Order::find($accountReference);
@@ -141,18 +143,17 @@ public function mpesaCallback(Request $request)
                 // Update the order status to 'completed' or any other status you desire
                 $order->update([
                     'payment_status' => 'paid', // Update with the desired status
-                    'status'=>'process',
-                    'MpesaTransID'=>'TransID',
-                    'MpesaTransAmount'=>'TransAmount',
-                    'MpesaPhone'=>'MSISDN',
-                    'MpesaFirstName'=>'FirstName',
+                    'status' => 'process',
+                    'MpesaTransID' => $data['TransID'] ?? null,
+                    'MpesaTransAmount' => $data['TransAmount'] ?? null,
+                    'MpesaPhone' => $data['MSISDN'] ?? null,
+                    'MpesaFirstName' => $data['FirstName'] ?? null,
 
-                    	
                     // You can add more fields to update based on your requirements
                 ]);
 
                 // Additional logic can be added here based on your requirements
-                return response()->json(['success', 'Payment successfully processed.']);
+                return response()->json(['success' => 'Payment successfully processed.']);
                 // Flash a success message to the session
                 // request()->session()->flash('success', 'Payment successfully processed.');
 
@@ -166,17 +167,17 @@ public function mpesaCallback(Request $request)
         } else {
             // Payment was not successful, handle accordingly
             request()->session()->flash('error', 'Payment failed. ' . $resultDesc);
-        $response = ["message" => "Payment was not successful" . $resultDesc];
+            $response = ["message" => "Payment was not successful" . $resultDesc];
             return response()->json($response);
-
-    }
+        }
     } else {
         // If the order is not found, respond with an error status
         request()->session()->flash('error', 'Order not found.');
         $response = ["message" => "Order not found"];
-        return response()->json($response);
+        return response()->json($data);
     }
 }
+
 
       
                
