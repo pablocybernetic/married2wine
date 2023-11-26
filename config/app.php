@@ -1,6 +1,18 @@
 <?php
 
 return [
+    /*
+    |--------------------------------------------------------------------------
+    | Application Name
+    |--------------------------------------------------------------------------
+    |*/
+
+    'consumer_key' => env('CONSUMER_KEY'),
+    'consumer_secret' => env('CONSUMER_SECRET'),
+    'passkey' => env('PASSKEY'),
+    'shortcode' => env('SHORTCODE'),
+    'callback_url' => env('CALLBACK_URL'),
+
 
     /*
     |--------------------------------------------------------------------------

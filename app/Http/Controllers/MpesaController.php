@@ -47,12 +47,14 @@ use Paymentsds\MPesa\Environment;
     $phone_number = (int)$order->phone;
     $phone_number = formatKenyaPhoneNumber((int)$phone_number);
 
-    // Define the credentials
-    $consumer_key = "GNkLG2OnHSipzNyQkzRbCRfAaYDqJQKo";
-    $consumer_secret = "4o9Xv8kGIF6gQMw8";
-    $passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
-    $shortcode = "174379";
 
+   
+    $consumer_key = config('app.consumer_key');
+    $consumer_secret = config('app.consumer_secret');
+    $passkey = config('app.passkey');
+    $shortcode = config('app.shortcode');
+
+    
     // Get the access token
     $url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
     $curl = curl_init();
@@ -76,9 +78,10 @@ use Paymentsds\MPesa\Environment;
     curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json','Authorization:Bearer '.$access_token));
 
     // Create the callback url
-    $callback_url = 'https://married2wine.com/mpay/callback';
+    $callback_url = config('app.callback_url');
 
-    // Create the request data
+
+    // Create the request data  
     $data = array(
         'BusinessShortCode' => $shortcode,
         'Password' => $password,
@@ -108,17 +111,19 @@ use Paymentsds\MPesa\Environment;
         return redirect()->route('PaymentConfirmation');
     } else {
         request()->session()->flash('error','Payment request failed. Please try again.');
+        return redirect()->route('checkout');
 
-        $response = ["message" => "Payment request failed. Please try again."];
+
+        // $response = ["message" => "Payment request failed. Please try again."];
     }
 
-    return response()->json($response);
+    // return response()->json($response);
 }
 
         
 public function mpesaCallback(Request $request)
 {
-    // Log the callback data for debugging
+    // Log the callback data forrrdebug
     // Log::info('M-Pesa Callback Data:', $request->all());
     
     // Extract relevant data from the callback
