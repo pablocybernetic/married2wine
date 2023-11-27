@@ -77,6 +77,7 @@
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
+        
         <div class="form-group">
           <label for="youtube" class="col-form-label">Youtube</label>
           <input type="text" class="form-control" name="youtube" required value="{{$data->youtube}}">
