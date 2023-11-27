@@ -117,7 +117,7 @@
           <label for="inputPhoto" class="col-form-label">Photo <span class="text-danger">*</span></label>
           <div class="input-group">
             <input id="thumbnail" class="form-control" type="file" name="photo" accept="image/jpeg, image/png, image/jpg, image/gif">
-
+ 
         </div>
         <div id="holder" style="margin-top:15px;max-height:100px;"></div>
           @error('photo')

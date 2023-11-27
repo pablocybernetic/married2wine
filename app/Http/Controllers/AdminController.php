@@ -58,14 +58,29 @@ class AdminController extends Controller
         $this->validate($request, [
             'short_des' => 'required|string',
             'description' => 'required|string',
-            'photo' => 'required',
-            'logo' => 'required',
+            'photo' => 'image|mimes:jpeg,png,jpg,gif|required', // Change to 'image' validation rule for photo
+            'logo' => 'image|mimes:jpeg,png,jpg,gif|required', // Change to 'image' validation rule for photo
             'address' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required|string',
-        ]);
+        ]); 
     
         $data = $request->all();
+        // Handle file upload and renaming
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $timestamp = now()->timestamp;
+            $fileName = 'married2wine' . $timestamp . '.' . $file->getClientOriginalExtension();
+          $file->move(public_path('images/logo/'), $fileName); // Move the file to the public/images directory
+            $data['logo'] = 'images/logo/' . $fileName;  // Store the image path as a string
+        }
+    if ($request->hasFile('photo')) {
+        $file = $request->file('photo');
+        $timestamp = now()->timestamp;
+        $fileName = 'married2wine' . $timestamp . '.' . $file->getClientOriginalExtension();
+      $file->move(public_path('images/logo/'), $fileName); // Move the file to the public/images directory
+        $data['photo'] = 'images/logo/' . $fileName;  // Store the image path as a string
+    }
         $settings = Settings::first(); // Attempt to get an existing record
     
         if (!$settings) {
