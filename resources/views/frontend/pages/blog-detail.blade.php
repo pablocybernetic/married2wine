@@ -1,6 +1,6 @@
 @extends('frontend.layouts.master')
 
-@section('title','E-TECH || Blog Detail page')
+@section('title','MarriedToWine || Blog Detail page')
 
 @section('main-content')
     <!-- Breadcrumbs -->
