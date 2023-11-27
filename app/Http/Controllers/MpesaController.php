@@ -91,7 +91,7 @@ use Paymentsds\MPesa\Environment;
         'PartyB' => $shortcode,
         'PhoneNumber' => $phone_number, 
         'CallBackURL' => $callback_url,
-        'AccountReference' => $order_id, // Use the order ID as AccountReference
+        'MerchantRequestID' => $order_id, // Use the order ID as AccountReference
         'TransactionDesc' => "Married2Wine"
     );
 
