@@ -91,8 +91,9 @@ use Paymentsds\MPesa\Environment;
         'PartyB' => $shortcode,
         'PhoneNumber' => $phone_number, 
         'CallBackURL' => $callback_url,
-        'MerchantRequestID' => $order_id, // Use the order ID as AccountReference
-        'TransactionDesc' => "Married2Wine"
+        'AccountReference' => "MarriedToWine LC", // Use the order ID as AccountReference
+        'TransactionDesc' => "Married2Wine",
+        "MerchantRequestID"=> $order_id,
     );
 
     $data_string = json_encode($data);
@@ -121,19 +122,16 @@ use Paymentsds\MPesa\Environment;
 
 public function mpesaCallback(Request $request)
 {
-    // Log the callback data for debugging
-    // Log::info('M-Pesa Callback Data:', $request->all());
-
     // Extract relevant data from the callback JSON
     $data = $request->input('Body.stkCallback');
 
     // Ensure that the required fields are present in the JSON data
     $resultCode = $data['ResultCode'] ?? null;
     $resultDesc = $data['ResultDesc'] ?? null;
-    $accountReference = $data['CheckoutRequestID'] ?? null;
+    $MerchantRequestID = $data['MerchantRequestID'] ?? null;
 
-    // Find the order with the specified AccountReference
-    $order = Order::where('id', $accountReference)->first();
+    // Find the order with the specified MerchantRequestID
+    $order = Order::where('id', $MerchantRequestID)->first();
 
     if ($order) {
         if ($resultCode == 0) {
@@ -167,7 +165,7 @@ public function mpesaCallback(Request $request)
     } else {
         // If the order is not found, respond with an error status
         request()->session()->flash('error', 'Order not found.');
-        $response = ["message" => "Order not found"];
+        $response = ["message" => "Order not found".$MerchantRequestID];
         return response()->json($response);
     }
 }
