@@ -123,8 +123,13 @@ use Paymentsds\MPesa\Environment;
 public function mpesaCallback(Request $request)
 {
     // Extract relevant data from the callback JSON
-    $data = $request->input('Body.stkCallback');
+    $post_data = file_get_contents("php://input");
 
+    $data = $request->input('Body.stkCallback');
+  $data = json_decode($post_data, true);
+  $log_file = fopen("mpesa.log", "a");
+  fwrite($log_file, print_r($data, true));
+  fclose($log_file);
     // Ensure that the required fields are present in the JSON data
     $resultCode = $data['ResultCode'] ?? null;
     $resultDesc = $data['ResultDesc'] ?? null;
