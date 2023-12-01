@@ -8,10 +8,7 @@ use Paymentsds\MPesa\Environment;
 
     
     { 
-        
-
-        
-        
+         
         public function showPaymentForm() {
         return view('mpesa_payment');
     }
@@ -125,19 +122,18 @@ public function mpesaCallback(Request $request)
     // Extract relevant data from the callback JSON
     $post_data = file_get_contents("php://input");
 
-    $data = $request->input('Body.stkCallback');
   $data = json_decode($post_data, true);
   $log_file = fopen("mpesa.log", "a");
   fwrite($log_file, print_r($data, true));
   fclose($log_file);
+  $data = $request->input('Body.stkCallback');
+
     // Ensure that the required fields are present in the JSON data
     $resultCode = $data['ResultCode'] ?? null;
     $resultDesc = $data['ResultDesc'] ?? null;
     $MerchantRequestID = $data['MerchantRequestID'] ?? null;
-
     // Find the order with the specified MerchantRequestID
     $order = Order::where('id', $MerchantRequestID)->first();
-
     if ($order) {
         if ($resultCode == 0) {
             // Payment was successful, update the order status
